@@ -55,8 +55,8 @@ export function ConversationItem({
       className={cn(
         "group relative rounded-lg mx-2 transition-colors duration-200 cursor-pointer",
         isActive 
-          ? "bg-blue-50 border border-blue-200" 
-          : "hover:bg-gray-50"
+          ? "bg-accent border border-accent-foreground/20" 
+          : "hover:bg-accent/50"
       )}
       onClick={onClick}
     >
@@ -64,24 +64,24 @@ export function ConversationItem({
         <MessageSquare 
           className={cn(
             "w-4 h-4 mt-0.5 mr-3 flex-shrink-0",
-            isActive ? "text-blue-600" : "text-gray-400"
+            isActive ? "text-primary" : "text-muted-foreground"
           )} 
         />
         <div className="flex-1 min-w-0">
           <div 
             className={cn(
               "font-medium text-sm truncate",
-              isActive ? "text-blue-900" : "text-gray-900"
+              isActive ? "text-foreground" : "text-foreground"
             )}
           >
             {conversation.title}
           </div>
           {conversation.lastMessagePreview && (
-            <div className="text-xs text-gray-500 truncate mt-1">
+            <div className="text-xs text-muted-foreground truncate mt-1">
               {conversation.lastMessagePreview}
             </div>
           )}
-          <div className="text-xs text-gray-400 mt-1">
+          <div className="text-xs text-muted-foreground/70 mt-1">
             {formatTimestamp(conversation.updatedAt)}
           </div>
         </div>
@@ -94,7 +94,7 @@ export function ConversationItem({
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 hover:bg-gray-200"
+              className="h-6 w-6 p-0"
               onClick={(e) => e.stopPropagation()}
             >
               <MoreHorizontal className="w-3 h-3" />
@@ -110,7 +110,7 @@ export function ConversationItem({
             {onDelete && (
               <DropdownMenuItem 
                 onClick={handleDelete}
-                className="text-red-600 focus:text-red-600"
+                variant="destructive"
               >
                 <Trash2 className="w-3 h-3 mr-2" />
                 Delete

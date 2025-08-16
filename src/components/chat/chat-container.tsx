@@ -22,27 +22,27 @@ export function ChatContainer({
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-50">
+    <div className="flex-1 flex flex-col bg-background">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-card border-b border-border px-6 py-4">
         <div className="flex items-center gap-3">
           {isSidebarCollapsed && onToggleSidebar && (
             <Button
               onClick={onToggleSidebar}
               variant="ghost"
               size="sm"
-              className="p-2 hover:bg-gray-100"
+              className="p-2"
               title="Show sidebar"
             >
               <PanelLeft className="w-4 h-4" />
             </Button>
           )}
           <div className="flex-1">
-            <h1 className="text-lg font-semibold text-gray-900">
+            <h1 className="text-lg font-semibold text-foreground">
               {conversation?.title || 'Agent Builder'}
             </h1>
             {conversation && conversation.messages.length > 0 && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 {conversation.messages.length} {conversation.messages.length === 1 ? 'message' : 'messages'}
               </p>
             )}
@@ -66,7 +66,7 @@ export function ChatContainer({
       </div>
 
       {/* Input Area */}
-      <div className="bg-white border-t border-gray-200 p-4">
+      <div className="bg-card border-t border-border p-4">
         <div className="max-w-4xl mx-auto">
           <ChatInput
             onSendMessage={onSendMessage}

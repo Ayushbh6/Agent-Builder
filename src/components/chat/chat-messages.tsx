@@ -41,8 +41,8 @@ export function ChatMessages({ messages, isTyping = false }: ChatMessagesProps) 
               <AvatarFallback 
                 className={cn(
                   message.role === 'user' 
-                    ? "bg-blue-600 text-white" 
-                    : "bg-gray-600 text-white"
+                    ? "bg-primary text-primary-foreground" 
+                    : "bg-secondary text-secondary-foreground"
                 )}
               >
                 {message.role === 'user' ? (
@@ -62,10 +62,10 @@ export function ChatMessages({ messages, isTyping = false }: ChatMessagesProps) 
             >
               <Card
                 className={cn(
-                  "p-4 shadow-sm border-0",
+                  "p-4 shadow-sm border",
                   message.role === 'user'
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-900"
+                    ? "bg-primary text-primary-foreground border-primary/20"
+                    : "bg-card text-card-foreground border-border"
                 )}
               >
                 <div className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -74,7 +74,7 @@ export function ChatMessages({ messages, isTyping = false }: ChatMessagesProps) 
               </Card>
               <div
                 className={cn(
-                  "text-xs text-gray-500 mt-1 px-2",
+                  "text-xs text-muted-foreground mt-1 px-2",
                   message.role === 'user' ? "text-right" : "text-left"
                 )}
               >
@@ -88,7 +88,7 @@ export function ChatMessages({ messages, isTyping = false }: ChatMessagesProps) 
         {isTyping && (
           <div className="flex items-start gap-4">
             <Avatar className="w-8 h-8 flex-shrink-0">
-              <AvatarFallback className="bg-gray-600 text-white">
+              <AvatarFallback className="bg-secondary text-secondary-foreground">
                 <Bot className="w-4 h-4" />
               </AvatarFallback>
             </Avatar>

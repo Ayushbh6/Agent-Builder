@@ -6,6 +6,7 @@ import { UserProfileSetup } from '@/components/onboarding/user-profile-setup';
 import { useStackAuth } from '@/hooks/use-stack-auth';
 import { ChatSidebar } from '@/components/chat/chat-sidebar';
 import { ChatContainer } from '@/components/chat/chat-container';
+import { AppHeader } from '@/components/layout/app-header';
 import { Conversation, Message } from '@/types/chat';
 
 export default function Home() {
@@ -54,15 +55,23 @@ export default function Home() {
 
   // Show onboarding if not completed
   if (isOnboarded === false) {
-    return <UserProfileSetup onComplete={() => setIsOnboarded(true)} />;
+    return (
+      <>
+        <AppHeader />
+        <UserProfileSetup onComplete={() => setIsOnboarded(true)} />
+      </>
+    );
   }
 
   // Loading state
   if (isOnboarded === null) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
+      <>
+        <AppHeader />
+        <div className="flex items-center justify-center min-h-screen bg-background">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </>
     );
   }
 
@@ -153,27 +162,30 @@ export default function Home() {
   const activeConversation = conversations.find(conv => conv.id === activeConversationId) || null;
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <ChatSidebar
-        conversations={conversations}
-        activeConversationId={activeConversationId}
-        onConversationSelect={handleConversationSelect}
-        onNewConversation={handleNewConversation}
-        onDeleteConversation={handleDeleteConversation}
-        userName={fullName}
-        userEmail={user.primaryEmail || ''}
-        onSignOut={signOut}
-        isCollapsed={isSidebarCollapsed}
-        onToggleCollapse={handleToggleSidebar}
-      />
-      <ChatContainer
-        conversation={activeConversation}
-        onSendMessage={handleSendMessage}
-        isLoading={isLoading}
-        isTyping={isTyping}
-        isSidebarCollapsed={isSidebarCollapsed}
-        onToggleSidebar={handleToggleSidebar}
-      />
-    </div>
+    <>
+      <AppHeader />
+      <div className="flex h-screen bg-background">
+        <ChatSidebar
+          conversations={conversations}
+          activeConversationId={activeConversationId}
+          onConversationSelect={handleConversationSelect}
+          onNewConversation={handleNewConversation}
+          onDeleteConversation={handleDeleteConversation}
+          userName={fullName}
+          userEmail={user.primaryEmail || ''}
+          onSignOut={signOut}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={handleToggleSidebar}
+        />
+        <ChatContainer
+          conversation={activeConversation}
+          onSendMessage={handleSendMessage}
+          isLoading={isLoading}
+          isTyping={isTyping}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={handleToggleSidebar}
+        />
+      </div>
+    </>
   );
 }

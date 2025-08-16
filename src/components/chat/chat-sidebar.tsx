@@ -35,14 +35,14 @@ export function ChatSidebar({
 
   if (isCollapsed) {
     return (
-      <div className="w-16 bg-white border-r border-gray-200 flex flex-col h-full">
+      <div className="w-16 bg-card border-r border-border flex flex-col h-full">
         {/* Collapsed header */}
-        <div className="p-3 border-b border-gray-200 flex justify-center">
+        <div className="p-3 border-b border-border flex justify-center">
           <Button
             onClick={onToggleCollapse}
             variant="ghost"
             size="sm"
-            className="p-2 hover:bg-gray-100"
+            className="p-2"
             title="Expand sidebar"
           >
             <PanelLeft className="w-4 h-4" />
@@ -55,10 +55,10 @@ export function ChatSidebar({
             onClick={onNewConversation}
             variant="ghost"
             size="sm"
-            className="w-full p-2 bg-blue-50 hover:bg-blue-100"
+            className="w-full p-2 bg-primary/10 hover:bg-primary/20"
             title="New chat"
           >
-            <Plus className="w-4 h-4 text-blue-600" />
+            <Plus className="w-4 h-4 text-primary" />
           </Button>
         </div>
 
@@ -66,17 +66,17 @@ export function ChatSidebar({
         <div className="flex-1" />
 
         {/* User profile - collapsed */}
-        <div className="p-3 border-t border-gray-200 flex justify-center">
+        <div className="p-3 border-t border-border flex justify-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="p-2 hover:bg-gray-100"
+                className="p-2"
                 title={userName}
               >
                 <Avatar className="w-6 h-6">
-                  <AvatarFallback className="bg-blue-600 text-white text-xs">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                     {userInitials}
                   </AvatarFallback>
                 </Avatar>
@@ -87,7 +87,7 @@ export function ChatSidebar({
                 <User className="w-4 h-4 mr-2" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onSignOut} className="text-red-600">
+              <DropdownMenuItem onClick={onSignOut} variant="destructive">
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign out
               </DropdownMenuItem>
@@ -99,16 +99,16 @@ export function ChatSidebar({
   }
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-full">
+    <div className="w-80 bg-card border-r border-border flex flex-col h-full">
       {/* Header with New Chat button and Collapse toggle */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold text-gray-900">Conversations</h2>
+          <h2 className="font-semibold text-foreground">Conversations</h2>
           <Button
             onClick={onToggleCollapse}
             variant="ghost"
             size="sm"
-            className="p-1 hover:bg-gray-100"
+            className="p-1"
             title="Collapse sidebar"
           >
             <PanelLeftClose className="w-4 h-4" />
@@ -116,7 +116,7 @@ export function ChatSidebar({
         </div>
         <Button
           onClick={onNewConversation}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
           size="default"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -137,7 +137,7 @@ export function ChatSidebar({
             />
           ))}
           {conversations.length === 0 && (
-            <div className="text-center text-gray-500 py-8">
+            <div className="text-center text-muted-foreground py-8">
               <p className="text-sm">No conversations yet</p>
               <p className="text-xs mt-1">Start a new chat to begin</p>
             </div>
@@ -146,23 +146,23 @@ export function ChatSidebar({
       </ScrollArea>
 
       {/* User Profile Section */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-border">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="w-full justify-start p-2 h-auto hover:bg-gray-100"
+              className="w-full justify-start p-2 h-auto"
             >
               <Avatar className="w-8 h-8 mr-3">
-                <AvatarFallback className="bg-blue-600 text-white text-sm">
+                <AvatarFallback className="bg-primary text-primary-foreground text-sm">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 text-left min-w-0">
-                <div className="font-medium text-sm truncate">{userName}</div>
-                <div className="text-xs text-gray-500 truncate">{userEmail}</div>
+                <div className="font-medium text-sm truncate text-foreground">{userName}</div>
+                <div className="text-xs text-muted-foreground truncate">{userEmail}</div>
               </div>
-              <MoreVertical className="w-4 h-4 text-gray-400" />
+              <MoreVertical className="w-4 h-4 text-muted-foreground" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
@@ -170,7 +170,7 @@ export function ChatSidebar({
               <User className="w-4 h-4 mr-2" />
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onSignOut} className="text-red-600">
+            <DropdownMenuItem onClick={onSignOut} variant="destructive">
               <LogOut className="w-4 h-4 mr-2" />
               Sign out
             </DropdownMenuItem>

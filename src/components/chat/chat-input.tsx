@@ -62,7 +62,7 @@ export function ChatInput({
             disabled={disabled}
             className={cn(
               "resize-none pr-12 min-h-[44px] max-h-32",
-              "border-gray-300 focus:border-blue-500 focus:ring-blue-500",
+              "border-border focus:border-primary focus:ring-primary",
               "text-sm leading-6"
             )}
             rows={1}
@@ -70,7 +70,7 @@ export function ChatInput({
           
           {/* Character counter */}
           {message.length > 0 && (
-            <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+            <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
               {message.length}
             </div>
           )}
@@ -83,12 +83,12 @@ export function ChatInput({
           className={cn(
             "px-4 h-[44px]",
             showSendButton
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
           )}
         >
           {isLoading ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
           ) : (
             <Send className="w-4 h-4" />
           )}
@@ -96,14 +96,14 @@ export function ChatInput({
       </form>
 
       {/* Keyboard shortcut hint */}
-      <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
+      <div className="flex justify-between items-center mt-2 text-xs text-muted-foreground">
         <span>
-          Press <kbd className="px-1 py-0.5 bg-gray-100 rounded text-xs">Enter</kbd> to send, 
-          <kbd className="px-1 py-0.5 bg-gray-100 rounded text-xs ml-1">Shift + Enter</kbd> for new line
+          Press <kbd className="px-1 py-0.5 bg-muted rounded text-xs">Enter</kbd> to send, 
+          <kbd className="px-1 py-0.5 bg-muted rounded text-xs ml-1">Shift + Enter</kbd> for new line
         </span>
         {message.length > 500 && (
           <span className={cn(
-            message.length > 1000 ? "text-red-500" : "text-yellow-600"
+            message.length > 1000 ? "text-destructive" : "text-yellow-600 dark:text-yellow-400"
           )}>
             {message.length > 1000 ? "Message too long" : "Long message"}
           </span>

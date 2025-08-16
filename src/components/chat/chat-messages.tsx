@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ChatMessagesProps } from '@/types/chat';
 import { TypingIndicator } from './typing-indicator';
+import { MarkdownContent } from '@/components/ui/markdown-content';
 import { User, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -75,9 +76,10 @@ export function ChatMessages({ messages, isTyping = false }: ChatMessagesProps) 
                     : "bg-card text-card-foreground border-border"
                 )}
               >
-                <div className="text-sm leading-relaxed whitespace-pre-wrap">
-                  {message.content}
-                </div>
+                <MarkdownContent 
+                  content={message.content}
+                  className="text-sm leading-relaxed"
+                />
               </Card>
               <div
                 className={cn(

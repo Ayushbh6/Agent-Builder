@@ -18,8 +18,15 @@ export function ChatMessages({ messages, isTyping = false }: ChatMessagesProps) 
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const formatTimestamp = (date: Date) => {
-    return date.toLocaleTimeString([], { 
+  const formatTimestamp = (date: Date | string | undefined) => {
+    if (!date) return '';
+    
+    const dateObj = date instanceof Date ? date : new Date(date);
+    
+    // Check if the date is valid
+    if (isNaN(dateObj.getTime())) return '';
+    
+    return dateObj.toLocaleTimeString([], { 
       hour: '2-digit', 
       minute: '2-digit' 
     });

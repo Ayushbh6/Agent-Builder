@@ -1,7 +1,7 @@
 'use client';
 
-import { useSession, signIn, signOut } from 'next-auth/react';
-import { useCallback } from 'react';
+import { useUser } from '@stackframe/stack';
+import { useStackAuth } from './use-stack-auth';
 
 export interface AuthUser {
   id: string;
@@ -17,31 +17,24 @@ export interface AuthState {
 }
 
 export interface AuthActions {
-  signIn: () => Promise<void>;
+  signIn: () => void;
   signOut: () => Promise<void>;
 }
 
 export function useAuth(): AuthState & AuthActions {
-  const { data: session, status } = useSession();
-
-  const handleSignIn = useCallback(async () => {
-    await signIn('google', { callbackUrl: '/' });
-  }, []);
-
-  const handleSignOut = useCallback(async () => {
-    await signOut({ callbackUrl: '/auth/signin' });
-  }, []);
+  const user = useUser();
+  const { signIn, signOut } = useStackAuth();
 
   return {
-    user: session?.user ? {
-      id: session.user.id!,
-      name: session.user.name,
-      email: session.user.email,
-      image: session.user.image,
+    user: user ? {
+      id: user.id,
+      name: user.displayName,
+      email: user.primaryEmail,
+      image: user.profileImageUrl,
     } : null,
-    isLoading: status === 'loading',
-    isAuthenticated: status === 'authenticated',
-    signIn: handleSignIn,
-    signOut: handleSignOut,
+    isLoading: false, // Stack handles loading internally
+    isAuthenticated: !!user,
+    signIn,
+    signOut,
   };
 }

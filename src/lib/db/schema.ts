@@ -1,9 +1,9 @@
 import { pgTable, uuid, varchar, text, timestamp, boolean, jsonb, integer, vector } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-// Users table
+// Users table - designed to work with Stack Auth IDs
 export const users = pgTable('users', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey(), // No defaultRandom() - allows Stack Auth to set explicit IDs
   email: varchar('email', { length: 255 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
   avatarUrl: text('avatar_url'),
@@ -57,6 +57,7 @@ export const conversations = pgTable('conversations', {
   title: varchar('title', { length: 255 }).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   lastMessageAt: timestamp('last_message_at').defaultNow(),
+  isUserTitled: boolean('is_user_titled').notNull().default(false),
 });
 
 // Messages table
@@ -66,6 +67,7 @@ export const messages = pgTable('messages', {
   role: varchar('role', { length: 20 }).notNull(),
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
+  metadata: jsonb('metadata').default('{}'),
 });
 
 // Knowledge bases table

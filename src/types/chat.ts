@@ -12,6 +12,8 @@ export interface Conversation {
   createdAt: Date;
   updatedAt: Date;
   lastMessagePreview?: string;
+  persisted?: boolean;
+  isUserTitled?: boolean;
 }
 
 export interface ChatState {
@@ -47,6 +49,7 @@ export interface ChatSidebarProps {
   onConversationSelect: (conversationId: string) => void;
   onNewConversation: () => void;
   onDeleteConversation: (conversationId: string) => void;
+  onRenameConversation: (conversationId: string, newTitle: string) => void;
   userName: string;
   userEmail: string;
   onSignOut: () => void;

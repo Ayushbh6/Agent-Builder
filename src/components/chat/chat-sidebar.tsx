@@ -20,6 +20,7 @@ export function ChatSidebar({
   onConversationSelect,
   onNewConversation,
   onDeleteConversation,
+  onRenameConversation,
   userName,
   userEmail,
   onSignOut,
@@ -99,7 +100,7 @@ export function ChatSidebar({
   }
 
   return (
-    <div className="w-80 bg-card border-r border-border flex flex-col h-full">
+    <div className="w-80 bg-card border-r border-border flex flex-col h-full overflow-hidden">
       {/* Header with New Chat button and Collapse toggle */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between mb-3">
@@ -125,8 +126,8 @@ export function ChatSidebar({
       </div>
 
       {/* Conversations List */}
-      <ScrollArea className="flex-1 px-2">
-        <div className="space-y-1 py-2">
+      <ScrollArea className="flex-1 px-2 overflow-x-hidden">
+        <div className="space-y-1 py-2 w-full">
           {conversations.map((conversation) => (
             <ConversationItem
               key={conversation.id}
@@ -134,6 +135,7 @@ export function ChatSidebar({
               isActive={conversation.id === activeConversationId}
               onClick={() => onConversationSelect(conversation.id)}
               onDelete={() => onDeleteConversation(conversation.id)}
+              onRename={(newTitle) => onRenameConversation(conversation.id, newTitle)}
             />
           ))}
           {conversations.length === 0 && (

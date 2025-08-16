@@ -1,6 +1,7 @@
 'use client';
 
-import { SessionProvider } from 'next-auth/react';
+import { StackProvider } from '@stackframe/stack';
+import { stackClientApp } from '@/stack';
 import { type ReactNode } from 'react';
 
 interface AuthProviderProps {
@@ -9,8 +10,8 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   return (
-    <SessionProvider>
+    <StackProvider app={stackClientApp}>
       {children}
-    </SessionProvider>
+    </StackProvider>
   );
 }

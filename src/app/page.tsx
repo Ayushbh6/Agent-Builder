@@ -1,103 +1,179 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useUser } from '@stackframe/stack';
+import { UserProfileSetup } from '@/components/onboarding/user-profile-setup';
+import { useStackAuth } from '@/hooks/use-stack-auth';
+import { ChatSidebar } from '@/components/chat/chat-sidebar';
+import { ChatContainer } from '@/components/chat/chat-container';
+import { Conversation, Message } from '@/types/chat';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const user = useUser({ or: 'redirect' });
+  const { signOut } = useStackAuth();
+  const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
+  
+  // Chat state
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  useEffect(() => {
+    if (user) {
+      const onboarded = (user.clientMetadata as any)?.onboarded === true;
+      setIsOnboarded(onboarded);
+      
+      // Initialize with sample conversation for demo
+      if (onboarded && conversations.length === 0) {
+        const sampleConversation: Conversation = {
+          id: '1',
+          title: 'Welcome to Agent Builder',
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              content: 'Hello! I\'m your AI assistant. How can I help you build amazing agents today?',
+              timestamp: new Date()
+            }
+          ],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          lastMessagePreview: 'Hello! I\'m your AI assistant...'
+        };
+        setConversations([sampleConversation]);
+        setActiveConversationId(sampleConversation.id);
+      }
+    }
+  }, [user, conversations.length]);
+
+  if (!user) {
+    return null; // Will redirect to sign in
+  }
+
+  // Show onboarding if not completed
+  if (isOnboarded === false) {
+    return <UserProfileSetup onComplete={() => setIsOnboarded(true)} />;
+  }
+
+  // Loading state
+  if (isOnboarded === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  // Get user display name
+  const firstName = (user.clientMetadata as any)?.firstName as string;
+  const lastName = (user.clientMetadata as any)?.lastName as string;
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : user.displayName || user.primaryEmail || 'User';
+
+  // Chat handlers
+  const handleNewConversation = () => {
+    const newConversation: Conversation = {
+      id: Date.now().toString(),
+      title: 'New conversation',
+      messages: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    setConversations([newConversation, ...conversations]);
+    setActiveConversationId(newConversation.id);
+  };
+
+  const handleConversationSelect = (conversationId: string) => {
+    setActiveConversationId(conversationId);
+  };
+
+  const handleDeleteConversation = (conversationId: string) => {
+    setConversations(prev => prev.filter(conv => conv.id !== conversationId));
+    if (activeConversationId === conversationId) {
+      setActiveConversationId(conversations.length > 1 ? conversations[0].id : null);
+    }
+  };
+
+  const handleToggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const handleSendMessage = async (content: string) => {
+    if (!activeConversationId) return;
+    
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content,
+      timestamp: new Date()
+    };
+
+    // Add user message
+    setConversations(prev => prev.map(conv => 
+      conv.id === activeConversationId 
+        ? {
+            ...conv,
+            messages: [...conv.messages, userMessage],
+            updatedAt: new Date(),
+            lastMessagePreview: content,
+            title: conv.messages.length === 0 ? content.slice(0, 50) + (content.length > 50 ? '...' : '') : conv.title
+          }
+        : conv
+    ));
+
+    // Simulate AI response
+    setIsTyping(true);
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `I received your message: "${content}". This is a demo response. In the full implementation, this would connect to your AI backend.`,
+        timestamp: new Date()
+      };
+
+      setConversations(prev => prev.map(conv => 
+        conv.id === activeConversationId 
+          ? {
+              ...conv,
+              messages: [...conv.messages, aiMessage],
+              updatedAt: new Date(),
+              lastMessagePreview: aiMessage.content
+            }
+          : conv
+      ));
+      
+      setIsTyping(false);
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const activeConversation = conversations.find(conv => conv.id === activeConversationId) || null;
+
+  return (
+    <div className="flex h-screen bg-gray-50">
+      <ChatSidebar
+        conversations={conversations}
+        activeConversationId={activeConversationId}
+        onConversationSelect={handleConversationSelect}
+        onNewConversation={handleNewConversation}
+        onDeleteConversation={handleDeleteConversation}
+        userName={fullName}
+        userEmail={user.primaryEmail || ''}
+        onSignOut={signOut}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={handleToggleSidebar}
+      />
+      <ChatContainer
+        conversation={activeConversation}
+        onSendMessage={handleSendMessage}
+        isLoading={isLoading}
+        isTyping={isTyping}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={handleToggleSidebar}
+      />
     </div>
   );
 }

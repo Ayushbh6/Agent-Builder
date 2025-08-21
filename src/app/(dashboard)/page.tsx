@@ -3,7 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
-import { WelcomeScreen } from '@/components/chat/welcome-screen'
+import { motion } from 'framer-motion'
+import { PersonalizedHeader } from '@/components/dashboard/personalized-header'
+import { MasterChat } from '@/components/dashboard/master-chat'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser()
@@ -33,25 +36,36 @@ export default function DashboardPage() {
     checkOnboarding()
   }, [user, isLoaded, router])
 
-  const handleQuickAction = (action: string) => {
-    // TODO: Handle quick actions
-    console.log('Quick action:', action)
-  }
-
   if (!isLoaded || isCheckingOnboarding) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
-          <span className="text-slate-600 dark:text-slate-400">Loading...</span>
-        </div>
+        <LoadingSpinner variant="apple" size="lg" />
       </div>
     )
   }
 
   return (
-    <div className="h-full">
-      <WelcomeScreen onQuickAction={handleQuickAction} />
-    </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="h-full flex flex-col"
+    >
+      {/* Personalized Header */}
+      <PersonalizedHeader className="flex-shrink-0" />
+      
+      {/* Main Content - Clean Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Master Chat - Full Width */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="flex-1 flex flex-col min-w-0"
+        >
+          <MasterChat className="h-full" />
+        </motion.div>
+      </div>
+    </motion.div>
   )
 }

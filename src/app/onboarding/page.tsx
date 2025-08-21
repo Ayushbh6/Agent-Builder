@@ -23,7 +23,7 @@ export default function OnboardingPage() {
         if (response.ok) {
           const { completed } = await response.json()
           if (completed) {
-            router.push('/dashboard')
+            router.push('/')
             return
           }
         }
@@ -71,7 +71,7 @@ export default function OnboardingPage() {
         throw new Error('Failed to save your information')
       }
 
-      router.push('/dashboard')
+      router.push('/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
     } finally {

@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/sonner'
-import { DynamicClerkProvider } from '@/components/auth/dynamic-clerk-provider'
+import { ClerkProvider } from '@clerk/nextjs'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -16,7 +16,7 @@ export function Providers({ children }: ProvidersProps) {
       enableSystem={true}
       disableTransitionOnChange={false}
     >
-      <DynamicClerkProvider>
+      <ClerkProvider>
         {children}
         <Toaster 
           position="top-right"
@@ -29,7 +29,7 @@ export function Providers({ children }: ProvidersProps) {
             },
           }}
         />
-      </DynamicClerkProvider>
+      </ClerkProvider>
     </ThemeProvider>
   )
 }

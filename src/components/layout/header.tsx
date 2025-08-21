@@ -4,7 +4,7 @@ import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
-import { Sidebar } from './sidebar'
+import { CollapsibleSidebar } from './collapsible-sidebar'
 
 export function Header() {
   return (
@@ -20,7 +20,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-64 p-0">
-              <Sidebar />
+              <CollapsibleSidebar />
             </SheetContent>
           </Sheet>
         </div>

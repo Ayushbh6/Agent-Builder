@@ -170,6 +170,16 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/30;
   }
+  
+  /* Hide scrollbar for textarea in chat input */
+  textarea::-webkit-scrollbar {
+    display: none;
+  }
+  
+  textarea {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer components {
